@@ -30,9 +30,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-#e^j+%0xfa@68g)ucb#0qeef)7grofob71^_h%24oaser46^#j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
@@ -67,6 +67,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.middleware.security.SecurityMiddleware',
+                'whitenoise.middleware.WhiteNoiseMiddleware',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -146,4 +148,7 @@ FACEBOOK_ACCESS_TOKEN = os.getenv("FACEBOOK_ACCESS_TOKEN")
 
 ALLOWED_HOSTS = ['*']  # Sabko allow kar dein
 CSRF_TRUSTED_ORIGINS = ['https://a9c4-2409-40c1-f-76a4-a1e1-cf92-eff-273a.ngrok-free.app']
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
