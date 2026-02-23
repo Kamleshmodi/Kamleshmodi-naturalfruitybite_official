@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Natural Fruity Bites</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <style>
+        /* --- Page Specific Premium Styles --- */
+        body {
+            background-color: #1E1916; /* Dark Chocolate Background */
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Card for Form */
+        .upload-container {
+            margin-top: 130px; /* Navbar Space */
+            margin-bottom: 50px;
+            max-width: 850px;
+            background: rgba(30, 25, 22, 0.85); /* Dark Glass */
+            border: 1px solid rgba(234, 166, 54, 0.3); /* Faint Gold Border */
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gold Glow Effect behind the card */
+        .upload-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(234,166,54,0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            color: #EAA636;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            font-size: 2.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #FDF5EB;
+            opacity: 0.7;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        /* --- Custom Input Fields --- */
+        .custom-input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .custom-input-group label {
+            display: block;
+            color: #EAA636;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(234,166,54,0.3);
+            color: #FDF5EB !important;
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            background: rgba(255,255,255,0.08);
+            border-color: #EAA636;
+            outline: none;
+            box-shadow: 0 0 15px rgba(234, 166, 54, 0.15);
+        }
+
+        /* Textarea resize fix */
+        textarea.form-control-custom {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* File Input Styling */
+        input[type="file"]::file-selector-button {
+            background-color: rgba(234, 166, 54, 0.1);
+            color: #EAA636;
+            border: 1px solid #EAA636;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #EAA636;
+            color: #1E1916;
+        }
+
+        /* --- Platform Selector (The Visual Icons) --- */
+        .platform-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 30px 0 40px 0;
+        }
+
+        .platform-option {
+            text-align: center;
+            position: relative;
+        }
+
+        /* Hide default checkbox */
+        .platform-option input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Circle Icon Styling */
+        .platform-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 2px solid #545454;
+            color: #545454; /* Inactive Color */
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+            background: rgba(0,0,0,0.2);
+        }
+
+        .platform-name {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #FDF5EB;
+            opacity: 0.6;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hover State */
+        .platform-label:hover {
+            border-color: rgba(234, 166, 54, 0.5);
+            color: rgba(234, 166, 54, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* Checked (Active) State - THE MAGIC HAPPENS HERE */
+        .platform-option input:checked + label {
+            border-color: #EAA636;
+            background: #EAA636;
+            color: #1E1916; /* Dark Icon on Gold Background */
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(234, 166, 54, 0.5);
+        }
+
+        .platform-option input:checked ~ .platform-name {
+            color: #EAA636;
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* --- Submit Button --- */
+        .btn-publish {
+            width: 100%;
+            background: linear-gradient(45deg, #EAA636, #F2C94C);
+            color: #1E1916;
+            border: none;
+            padding: 18px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(234, 166, 54, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-publish:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(234, 166, 54, 0.4);
+            background: linear-gradient(45deg, #F2C94C, #EAA636);
+        }
+
+        .btn-publish:active {
+            transform: scale(0.98);
+        }
+
+        .platform-container {
+        display: flex;
+        justify-content: center;
+        gap: 25px; /* Icons ke beech ka gap */
+        flex-wrap: wrap;
+        margin: 20px 0 40px 0;
+    }
+
+    .platform-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* 1. Asli Checkbox ko chhupa do */
+    .platform-option input[type="checkbox"] {
+        display: none;
+    }
+
+    /* 2. Label ko Round Circle banao */
+    .platform-option label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;  /* Circle ki chaudai */
+        height: 70px; /* Circle ki unchai */
+        border-radius: 50%; /* Golakar karne ke liye */
+        border: 2px solid rgba(255, 255, 255, 0.2); /* Halka border */
+        background: rgba(255, 255, 255, 0.05); /* Glassy Background */
+        color: #aaa; /* Icon ka color (Inactive) */
+        font-size: 1.8rem; /* Icon size */
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy Animation */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* 3. Hover Effect (Jab mouse upar jaye) */
+    .platform-option label:hover {
+        border-color: #EAA636;
+        color: #EAA636;
+        transform: translateY(-5px); /* Thoda upar uthega */
+    }
+
+    /* 4. ACTIVE STATE (Jab select karein) - Magic yahan hai */
+    .platform-option input:checked + label {
+        background: #EAA636; /* Gold Background */
+        border-color: #EAA636;
+        color: #1E1916; /* Dark Icon inside Gold */
+        transform: scale(1.15); /* Size bada ho jayega */
+        box-shadow: 0 0 25px rgba(234, 166, 54, 0.6); /* Gold Glow */
+    }
+
+    /* Naam ka style */
+    .platform-name {
+        margin-top: 12px;
+        font-size: 0.85rem;
+        color: rgba(253, 245, 235, 0.6);
+        font-weight: 500;
+        transition: 0.3s;
+        letter-spacing: 0.5px;
+    }
+
+    /* Naam bhi Gold ho jaye jab select ho */
+    .platform-option input:checked ~ .platform-name {
+        color: #EAA636;
+        font-weight: 700;
+    }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-lg-0 px-lg-5 wow fadeIn" style="background-color: rgba(30, 25, 22, 0.95); border-bottom: 1px solid rgba(234, 166, 54, 0.1);">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <img src="{% static 'img/logo.png' %}" alt="Logo" class="nav-logo me-2" style="max-height: 50px;">
+                <div class="brand-text-container">
+                    <h1 class="brand-name-text m-0" style="color: #EAA636; font-family: 'Playfair Display', serif; font-size: 1.5rem;">Natural Fruity Bites</h1>
+                </div>
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav mx-auto p-4 p-lg-0">
+                    <!-- <a href="/" class="nav-item nav-link">View Site</a>
+                    <a href="/products/" class="nav-item nav-link">Products</a>
+                    <a href="#" class="nav-item nav-link active" style="color: #EAA636;">Create Post</a> -->
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                        <i class="fa fa-user-shield me-2" style="color: #EAA636;"></i>Admin Panel
+                    </a>
+                    <div class="dropdown-menu bg-dark m-0" style="border: 1px solid #EAA636;">
+                        <a href="/" class="dropdown-item text-light">Dashboard</a>
+                        <a href="{% url 'logout' %}" class="dropdown-item" style="color: #ff6b6b;">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container d-flex justify-content-center">
+        <div class="upload-container">
+            
+            <h2 class="section-title">Share the Sweetness</h2>
+            <p class="section-subtitle">Upload once, publish everywhere. Reach your customers instantly.</p>
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" 
+                     style="background: rgba(234, 166, 54, 0.1); border: 1px solid #EAA636; color: #FDF5EB; border-radius: 10px;">
+                    <i class="fas fa-info-circle me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1); opacity: 0.8;"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="custom-input-group">
+        <label style="color: #EAA636; font-weight: 500; margin-bottom: 8px; display: block;">Post Image / Video</label>
+        <input type="file" name="image" class="form-control-custom" accept="image/*,video/*" required>
+    </div>
+
+    <div class="custom-input-group">
+        <label style="color: #EAA636; font-weight: 500; margin-bottom: 8px; display: block;">Write Caption</label>
+        <textarea name="caption" class="form-control-custom" placeholder="What's new in the world of chocolate? Add hashtags, emojis, and links..." required></textarea>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 25px; margin-top: 30px;">
+        <span style="color: #EAA636; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; border-bottom: 1px solid rgba(234,166,54,0.3); padding-bottom: 5px;">
+            Select Channels
+        </span>
+    </div>
+
+    <div class="platform-container">
+        
+        <div class="platform-option">
+            <input type="checkbox" name="platforms" value="facebook" id="fb">
+            <label for="fb" title="Publish to Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </label>
+            <span class="platform-name">Facebook</span>
+        </div>
+
+        <div class="platform-option">
+            <input type="checkbox" name="platforms" value="instagram" id="insta">
+            <label for="insta" title="Publish to Instagram">
+                <i class="fab fa-instagram"></i>
+            </label>
+            <span class="platform-name">Instagram</span>
+        </div>
+
+        <!-- <div class="platform-option">
+            <input type="checkbox" name="platforms" value="twitter" id="tw">
+            <label for="tw" title="Post on X">
+                <i class="fab fa-twitter"></i> 
+            </label>
+            <span class="platform-name">X (Twitter)</span>
+        </div> -->
+
+        <div class="platform-option">
+            <input type="checkbox" name="platforms" value="whatsapp" id="wa">
+            <label for="wa" title="Broadcast on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </label>
+            <span class="platform-name">WhatsApp</span>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn-publish">
+        <i class="fas fa-paper-plane me-2"></i> Launch Campaign
+    </button>
+
+</form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const fileInput = document.querySelector('input[type="file"]');
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                e.target.style.borderColor = '#EAA636';
+                e.target.style.background = 'rgba(234, 166, 54, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>

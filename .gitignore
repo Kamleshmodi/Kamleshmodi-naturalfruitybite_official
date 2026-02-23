@@ -1,0 +1,15 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# SQLite DB (optional)
+db.sqlite3
+
+# VS Code
+.vscode/
+
+# Mac files
+.DS_Store

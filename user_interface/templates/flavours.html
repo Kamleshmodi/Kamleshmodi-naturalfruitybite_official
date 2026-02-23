@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Our Flavors - Natural Fruity Bites</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <style>
+        /* Navbar Fixes (From your request) */
+        .navbar-nav .dropdown-menu {
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+        .dropdown-item:hover {
+            background-color: var(--primary) !important;
+            color: var(--dark) !important;
+        }
+        
+        /* --- HERO SECTION --- */
+        .flavor-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("{% static 'img/header-bg.jpg' %}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding-top: 150px;
+            padding-bottom: 100px;
+            margin-bottom: 50px;
+        }
+
+        /* --- PRODUCT CARD DESIGN --- */
+        .product-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            height: 100%;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px); /* Card moves up */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1); /* Image Zoom effect */
+        }
+
+        .flavor-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #fff;
+            z-index: 2;
+        }
+
+        /* Specific Colors for Flavors */
+        .badge-dark { background: #3E2723; box-shadow: 0 4px 10px rgba(62, 39, 35, 0.4); }
+        .badge-milk { background: #D84315; box-shadow: 0 4px 10px rgba(216, 67, 21, 0.4); }
+        .badge-white { background: #5E35B1; box-shadow: 0 4px 10px rgba(94, 53, 177, 0.4); }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .product-ingredients {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .btn-order {
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-order:hover {
+            background-color: #128C7E;
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* --- ICONS SECTION --- */
+        .feature-icon-box {
+            text-align: center;
+            padding: 30px;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+        .feature-icon-box:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .feature-icon-box i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        .feature-icon-box:hover i {
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <img src="{% static 'img/logo.png' %}" alt="Logo" class="nav-logo me-2">
+                <div class="brand-text-container">
+                    <h1 class="brand-name-text text-primary m-0">Natural Fruity Bites</h1>
+                    <small class="tagline-text text-light">Bite. Smile. Repeat.</small>
+                </div>
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav mx-auto p-4 p-lg-0">
+                    <a href="/" class="nav-item nav-link">Home</a>
+                    <a href="/about/" class="nav-item nav-link">About</a>
+                    <a href="/service/" class="nav-item nav-link">Services</a>
+                    <a href="/products/" class="nav-item nav-link active">Products</a> <a href="/contact_us/" class="nav-item nav-link">Contact</a>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fa fa-user-circle me-1"></i> Profile
+                            </a>
+                            <div class="dropdown-menu bg-dark m-0">
+                                <a href="#" class="dropdown-item text-light">Welcome, {{ user.first_name }}</a>
+                                <a href="{% url 'logout' %}" class="dropdown-item text-primary">Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login_registration' %}" class="nav-item nav-link">Login</a>
+                    {% endif %}
+                </div>
+                <div class="d-none d-lg-flex align-items-center">
+                    <div class="flex-shrink-0 btn-lg-square border border-light rounded-circle">
+                        <i class="fa fa-phone text-primary"></i>
+                    </div>
+                    <div class="ps-3">
+                        <a href="tel:+917043086067" class="text-primary mb-0">Call Us
+                        <p class="text-light fs-6 mb-0">+91 70430 86067</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid flavor-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="container text-center">
+            <h1 class="display-3 text-white animated slideInDown mb-4">Explore Our Flavors</h1>
+            <p class="text-white lead mb-0">Experience the perfect fusion of Real Fruits & Premium Chocolate.</p>
+        </div>
+    </div>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+                <p class="text-primary text-uppercase mb-2">Our Collection</p>
+                <h1 class="display-6 mb-4">Handcrafted Perfection in Every Bite</h1>
+            </div>
+
+            <div class="row g-4">
+                
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="product-card">
+                        <span class="flavor-badge badge-dark">Best Seller</span>
+                        <div class="product-img-wrapper">
+                            <img src="{% static 'img/dark_pom.png' %}" alt="Dark Chocolate Pomegranate" class="product-img">
+                        </div>
+                        <div class="card-body">
+                            <div class="product-ingredients">Milk Chocolate with Cherry</div>
+                            <h3 class="product-title">Midnight Anar</h3>
+                            <p class="text-muted">A bold fusion of 70% intense dark chocolate and juicy, ruby-red pomegranate arils. A treat for the true connoisseur.</p>
+                            <a href="https://wa.me/917043086067?text=Hi, I want to order Dark Chocolate Pomegranate!" target="_blank" class="btn btn-order">
+                                <i class="fab fa-whatsapp me-2"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="product-card">
+                        <span class="flavor-badge badge-milk">Kids Favorite</span>
+                        <div class="product-img-wrapper">
+                            <img src="{% static 'img/milk_straw.png' %}" alt="Milk Chocolate Strawberry" class="product-img">
+                        </div>
+                        <div class="card-body">
+                            <div class="product-ingredients">Dark Chocolate with Pomegranate</div>
+                            <h3 class="product-title">Berry Bliss</h3>
+                            <p class="text-muted">Creamy, smooth milk chocolate embracing sweet, sun-ripened strawberry chunks. Pure nostalgia in every bite.</p>
+                            <a href="https://wa.me/917043086067?text=Hi, I want to order Milk Chocolate Strawberry!" target="_blank" class="btn btn-order">
+                                <i class="fab fa-whatsapp me-2"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="product-card">
+                        <span class="flavor-badge badge-white">Exotic Choice</span>
+                        <div class="product-img-wrapper">
+                            <img src="{% static 'img/white_blue.png' %}" alt="White Chocolate Blueberry" class="product-img">
+                        </div>
+                        <div class="card-body">
+                            <div class="product-ingredients">Milk Chocolate with Blueberry 🫐</div>
+                            <h3 class="product-title">Snowy Blue</h3>
+                            <p class="text-muted">Velvety white chocolate paired with tangy, premium dried blueberries. An exotic and luxurious flavor profile.</p>
+                            <a href="https://wa.me/917043086067?text=Hi, I want to order White Chocolate Blueberry!" target="_blank" class="btn btn-order">
+                                <i class="fab fa-whatsapp me-2"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container-xxl py-5 bg-light">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="feature-icon-box bg-white">
+                        <i class="fa fa-leaf"></i>
+                        <h4>100% Natural</h4>
+                        <p class="mb-0">No artificial flavors or colors. Just pure fruit and premium cocoa.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="feature-icon-box bg-white">
+                        <i class="fa fa-hand-holding-heart"></i>
+                        <h4>Handcrafted</h4>
+                        <p class="mb-0">Made in small batches with love and attention to detail.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="feature-icon-box bg-white">
+                        <i class="fa fa-shipping-fast"></i>
+                        <h4>Fresh Delivery</h4>
+                        <p class="mb-0">Packed hygienically and delivered fresh to your doorstep.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid bg-dark text-light footer my-6 mb-0 py-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Shop Address</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>AHMEDABAD, GUJARAT, INDIA</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 70430 86067</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>naturalbiteofficial@gmail.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href="https://www.facebook.com/profile.php?id=61588209874394"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href="https://www.instagram.com/naturalfruitybite.offical"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Quick Links</h4>
+                    <a class="btn btn-link" href="/">Home</a>
+                    <a class="btn btn-link" href="/about/">About Us</a>
+                    <a class="btn btn-link" href="/contact_us/">Contact Us</a>
+                    <a class="btn btn-link" href="/service/">Our Services</a>
+                    <a class="btn btn-link" href="/products/">Products</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Photo Gallery</h4>
+                    <div class="row g-2">
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-1.jpg' %}" alt="Image"></div>
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-2.jpg' %}" alt="Image"></div>
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-3.jpg' %}" alt="Image"></div>
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-2.jpg' %}" alt="Image"></div>
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-1.jpg' %}" alt="Image"></div>
+                        <div class="col-4"><img class="img-fluid bg-light rounded p-1" src="{% static 'img/product-2.jpg' %}" alt="Image"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
