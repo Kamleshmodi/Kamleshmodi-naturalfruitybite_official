@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True  # After debugging set to False
+DEBUG = False  # After debugging set to False
 
 ALLOWED_HOSTS = ['.onrender.com']
 
