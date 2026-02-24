@@ -235,4 +235,16 @@ def contact_us(request):
     return render(request, 'contact_us.html')
 
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 
+def create_admin(request):
+    User = get_user_model()
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@gmail.com',
+            password='12345678'
+        )
+        return HttpResponse("Superuser created")
+    return HttpResponse("Superuser already exists")
